@@ -1,5 +1,8 @@
 name: Test App
-on: push
+on:
+  push:
+    paths:
+      - app/**
 jobs:
   build:
     name: Test with Jest
