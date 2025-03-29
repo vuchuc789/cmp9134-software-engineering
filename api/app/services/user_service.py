@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import uuid4
 
 from fastapi import BackgroundTasks, HTTPException, status
@@ -7,6 +8,7 @@ from sqlmodel import Session, select
 from app.core.config import Settings
 from app.core.security import get_password_hash, verify_password
 from app.models.user import EmailVerificationStatus, User
+from app.models.user import Session as UserSession
 from app.schemas.user import CreateUserData, UpdateUserData
 from app.utils.mail import send_email_with_sendgrid
 
@@ -193,6 +195,34 @@ class UserService:
         self.update_user(db, user=user_to_update, current_user=user)
 
         return user
+
+    def create_session(self, user: User, expire_time: datetime, db: Session):
+        session = UserSession(expire_time=expire_time, user=user)
+
+        db.add(session)
+        db.commit()
+        db.refresh(session)
+
+        return session
+
+    def get_user_with_sessions(
+        self, db: Session, username: str, session_id: int
+    ) -> tuple[User, UserSession] | None:
+        statement = (
+            select(User, UserSession)
+            .join(UserSession)
+            .where(User.username == username, UserSession.id == session_id)
+        )
+        results = db.exec(statement)
+
+        return results.first()
+
+    def renew_session(self, session: UserSession, expire_time: datetime, db: Session):
+        session.expire_time = expire_time
+
+        db.add(session)
+        db.commit()
+        db.refresh(session)
 
 
 user_service = UserService()

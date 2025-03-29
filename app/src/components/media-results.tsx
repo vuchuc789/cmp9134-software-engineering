@@ -147,9 +147,18 @@ export function MediaResults() {
                       blurDataURL="/placeholder.svg"
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     />
-                    <div className="absolute inset-0 opacity-0 hover:opacity-100 bg-black/50 transition-opacity">
-                      <div className="absolute bottom-3 left-3 text-white">
-                        <p className="text-xs font-medium">{item.license}</p>
+                    {/* License info - visible on mobile by default, hidden on hover on desktop */}
+                    <div className="absolute inset-0 flex flex-col justify-between">
+                      {/* Always visible on mobile, hidden on desktop unless hovered */}
+                      <div className="sm:hidden absolute bottom-3 left-3 text-white bg-black/50 px-2 py-1 rounded text-xs">
+                        <p className="font-medium">{item.license}</p>
+                      </div>
+
+                      {/* Hidden by default, visible on hover (desktop only) */}
+                      <div className="hidden sm:block absolute inset-0 opacity-0 hover:opacity-100 bg-black/50 transition-opacity">
+                        <div className="absolute bottom-3 left-3 text-white">
+                          <p className="text-xs font-medium">{item.license}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -235,9 +244,18 @@ export function MediaResults() {
                         </h3>
                       </div>
                     </div>
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
-                      <div className="absolute bottom-3 left-3 text-white">
-                        <p className="text-xs font-medium">{item.license}</p>
+                    {/* License info - visible on mobile by default, hidden on hover on desktop */}
+                    <div className="absolute inset-0 flex flex-col justify-between">
+                      {/* Always visible on mobile, hidden on desktop */}
+                      <div className="sm:hidden absolute bottom-3 left-3 text-white bg-black/50 px-2 py-1 rounded text-xs">
+                        <p className="font-medium">{item.license}</p>
+                      </div>
+
+                      {/* Hidden by default, visible on hover (desktop only) */}
+                      <div className="hidden sm:block absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
+                        <div className="absolute bottom-3 left-3 text-white">
+                          <p className="text-xs font-medium">{item.license}</p>
+                        </div>
                       </div>
                     </div>
                     <button

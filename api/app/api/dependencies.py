@@ -1,13 +1,14 @@
 from typing import Annotated
 
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Cookie, Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from sqlmodel import Session
 
 from app.core.config import Settings, get_settings
 from app.core.database import get_session
 from app.core.security import TokenData, oauth2_scheme
+from app.models.user import Session as UserSession
 from app.models.user import User
 from app.services.user_service import user_service
 
@@ -51,3 +52,35 @@ async def get_current_user(
 
 
 CurrentUserDep = Annotated[User, Depends(get_current_user)]
+
+
+async def get_user_from_cookie(
+    refresh_token: Annotated[str | None, Cookie()],
+    session: SessionDep,
+    settings: SettingsDep,
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail='Could not validate credentials',
+    )
+    try:
+        # expiration time is automatically verified in jwt.decode()
+        payload = jwt.decode(
+            refresh_token,
+            settings.auth_token_secret_key,
+            algorithms=[settings.auth_token_algorithm],
+        )
+        username = payload.get('sub')
+        session_id = payload.get('session_id')
+        if (username is None) or (session_id is None):
+            raise credentials_exception
+    except InvalidTokenError as err:
+        raise credentials_exception from err
+
+    user = user_service.get_user_with_sessions(session, username=username, session_id=session_id)
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+UserFromCookiesDep = Annotated[tuple[User, UserSession], Depends(get_user_from_cookie)]

@@ -1,12 +1,17 @@
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import UUID4
 
-from app.api.dependencies import CurrentUserDep, SessionDep, SettingsDep
-from app.core.security import Token, create_access_token
+from app.api.dependencies import (
+    CurrentUserDep,
+    SessionDep,
+    SettingsDep,
+    UserFromCookiesDep,
+)
+from app.core.security import Token, create_jwt_token
 from app.schemas.user import (
     CreateUserData,
     CreateUserForm,
@@ -32,6 +37,7 @@ async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: SessionDep,
     settings: SettingsDep,
+    response: Response,
 ) -> Token:
     user = user_service.authenticate_user(session, form_data.username, form_data.password)
     if not user:
@@ -40,10 +46,66 @@ async def login_for_access_token(
             detail='Incorrect username or password',
             headers={'WWW-Authenticate': 'Bearer'},
         )
+
+    now = datetime.now(UTC)
+
+    refresh_token_expires = timedelta(minutes=settings.refresh_token_expire_minutes)
+
+    user_session = user_service.create_session(
+        user=user, expire_time=now + refresh_token_expires, db=session
+    )
+    refresh_token = create_jwt_token(
+        data={'sub': user.username, 'session_id': user_session.id},
+        expire=now + refresh_token_expires,
+        secret_key=settings.auth_token_secret_key,
+        algorithm=settings.auth_token_algorithm,
+    )
+
+    response.set_cookie(
+        key='refresh_token', value=refresh_token, secure=True, samesite='strict', httponly=True
+    )
+
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
-    access_token = create_access_token(
-        data={'sub': user.username},
-        expires_delta=access_token_expires,
+    access_token = create_jwt_token(
+        data={'sub': user.username, 'session_id': user_session.id},
+        expire=now + access_token_expires,
+        secret_key=settings.auth_token_secret_key,
+        algorithm=settings.auth_token_algorithm,
+    )
+    return Token(access_token=access_token, token_type='bearer')
+
+
+@router.post('/refresh')
+async def refresh_access_token(
+    user_from_cookies: UserFromCookiesDep,
+    session: SessionDep,
+    settings: SettingsDep,
+    response: Response,
+):
+    user = user_from_cookies[0]
+    user_session = user_from_cookies[1]
+
+    now = datetime.now(UTC)
+    refresh_token_expires = timedelta(minutes=settings.refresh_token_expire_minutes)
+
+    user_service.renew_session(
+        session=user_session, expire_time=now + refresh_token_expires, db=session
+    )
+    refresh_token = create_jwt_token(
+        data={'sub': user.username, 'session_id': user_session.id},
+        expire=now + refresh_token_expires,
+        secret_key=settings.auth_token_secret_key,
+        algorithm=settings.auth_token_algorithm,
+    )
+
+    response.set_cookie(
+        key='refresh_token', value=refresh_token, secure=True, samesite='strict', httponly=True
+    )
+
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    access_token = create_jwt_token(
+        data={'sub': user.username, 'session_id': user_session.id},
+        expire=now + access_token_expires,
         secret_key=settings.auth_token_secret_key,
         algorithm=settings.auth_token_algorithm,
     )
