@@ -133,6 +133,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       const authRes = await loginForAccessTokenUsersLoginPost({
         body: values,
+        credentials: 'include',
       });
 
       if (authRes.response.status !== 200) {
