@@ -140,10 +140,18 @@ def refresh_access_token(
 def logout(
     user_auth_session: Annotated[tuple[User, AuthSession], Depends(get_current_user)],
     session: SessionDep,
+    response: Response,
 ):
     auth_session = user_auth_session[1]
 
     user_service.update_session(auth_session, is_ended=True, db=session)
+
+    response.delete_cookie(
+        key='refresh_token',
+        httponly=True,
+        samesite='None',
+        secure=True,
+    )
 
     return {'detail': 'Logged out'}
 
