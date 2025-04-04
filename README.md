@@ -3,6 +3,8 @@
 ![GitHub branch check runs](https://img.shields.io/github/check-runs/vuchuc789/cmp9134-software-engineering/main)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/vuchuc789/cmp9134-software-engineering/build-and-deploy.yml)
 
+[Link to website](https://cmp9134.app.vuchuc789.co.uk)
+
 This project is part of my Software Engineering module (CMP-9134) at the University of Lincoln. It is a web application that enables authenticated users to search for open-license media, including images, audio, and songs. The platform provides an intuitive interface for discovering and accessing media content with proper licensing information.
 
 ## Features
@@ -36,6 +38,8 @@ This project is part of my Software Engineering module (CMP-9134) at the Univers
 Before setting up the project, ensure you have the following:
 
 - **Docker** installed on your local machine – Follow this [guide](https://docs.docker.com/engine/install/) to install Docker.
+- **Node.js (LTS version)** – Install it from the official [Node.js website](https://nodejs.org/).
+- **Python (with venv support)** – Install it from [Python.org](https://www.python.org/downloads/) and ensure `python -m venv` works.
 - **Openverse API credentials** – Register and retrieve your API key from [Openverse](https://api.openverse.org/v1/#tag/auth/operation/register).
 - **SendGrid API key** – Sign up for a [SendGrid account](https://signup.sendgrid.com/) to obtain an API key.
 - **Azure credentials** _(optional, for deployment)_ – If you plan to deploy the website yourself, you can register for Azure's **$100 student free credit** and follow this [tutorial](https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash#create-a-service-principal-with-role-and-scope) to retrieve credentials.
@@ -79,7 +83,10 @@ Open **two separate terminals** and run the following commands:
 #### Terminal 1: Start the API
 
 ```
+python -m venv .venv
+source .venv/bin/activate
 cd api
+pip install -r requirements.txt
 python -m app.main
 ```
 
@@ -87,6 +94,7 @@ python -m app.main
 
 ```
 cd app
+npm install
 npm run dev
 ```
 
