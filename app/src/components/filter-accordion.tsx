@@ -31,7 +31,7 @@ export function FilterAccordion() {
       defaultValue={['license', 'license_type', 'categories']}
     >
       <AccordionItem value="license">
-        <AccordionTrigger className="cursor-pointer">License</AccordionTrigger>
+        <AccordionTrigger>License</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2 mb-2">
@@ -54,11 +54,10 @@ export function FilterAccordion() {
                   id={lic}
                   checked={!!license?.includes(lic)}
                   onCheckedChange={() => handleLicenseToggle(lic)}
-                  className="cursor-pointer"
                 />
                 <Label
                   htmlFor={lic}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {lic}
                 </Label>

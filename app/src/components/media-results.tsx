@@ -117,14 +117,14 @@ export function MediaResults() {
       <TabsList className="mb-6 border-b rounded-none w-full h-auto p-0 bg-transparent justify-start">
         <TabsTrigger
           value="image"
-          className="flex items-center gap-2 px-6 py-3 rounded-none border-0 border-b-2 border-transparent cursor-pointer data-[state=active]:border-gray-900 dark:data-[state=active]:border-gray-100 bg-transparent data-[state=active]:shadow-xs"
+          className="flex items-center gap-2 px-6 py-3 rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 dark:data-[state=active]:border-gray-100 bg-transparent data-[state=active]:shadow-xs"
         >
           <ImageIcon className="h-5 w-5" />
           <span>Images</span>
         </TabsTrigger>
         <TabsTrigger
           value="audio"
-          className="flex items-center gap-2 px-6 py-3 rounded-none border-0 border-b-2 border-transparent cursor-pointer data-[state=active]:border-gray-900 dark:data-[state=active]:border-gray-100 bg-transparent data-[state=active]:shadow-xs"
+          className="flex items-center gap-2 px-6 py-3 rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 dark:data-[state=active]:border-gray-100 bg-transparent data-[state=active]:shadow-xs"
         >
           <Music className="h-5 w-5" />
           <span>Audio</span>

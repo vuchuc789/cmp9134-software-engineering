@@ -155,7 +155,7 @@ export default function AudioDetailPage({
           <Button
             variant="ghost"
             size="sm"
-            className="flex items-center gap-1 px-2 h-8 cursor-pointer"
+            className="flex items-center gap-1 px-2 h-8"
             onClick={() => {
               if (isBrowser() && window.history.length > 1) {
                 router.back();
@@ -202,7 +202,7 @@ export default function AudioDetailPage({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-12 w-12 rounded-full bg-white text-gray-900 hover:bg-white/90 hover:text-gray-900 cursor-pointer"
+                    className="h-12 w-12 rounded-full bg-white text-gray-900 hover:bg-white/90 hover:text-gray-900"
                     onClick={handlePlayPause}
                   >
                     {isPlaying ? (
@@ -218,7 +218,6 @@ export default function AudioDetailPage({
                       max={duration || 100}
                       step={0.1}
                       onValueChange={handleTimeChange}
-                      className="cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-white">
                       <span>{formatTime(currentTime)}</span>
@@ -230,7 +229,7 @@ export default function AudioDetailPage({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-white hover:text-white hover:bg-white/10 cursor-pointer"
+                      className="text-white hover:text-white hover:bg-white/10"
                       onClick={toggleMute}
                     >
                       {isMuted ? (
@@ -244,7 +243,7 @@ export default function AudioDetailPage({
                       max={1}
                       step={0.01}
                       onValueChange={handleVolumeChange}
-                      className="w-20 cursor-pointer"
+                      className="w-20"
                     />
                   </div>
                 </div>
@@ -285,7 +284,7 @@ export default function AudioDetailPage({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="flex items-center gap-2 cursor-pointer flex-1">
+              <Button className="flex items-center gap-2 flex-1">
                 <ExternalLink className="h-4 w-4" />
                 View Original
               </Button>
