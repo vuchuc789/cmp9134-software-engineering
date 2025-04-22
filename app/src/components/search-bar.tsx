@@ -75,7 +75,7 @@ export function SearchBar() {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-10 w-10 cursor-pointer"
+                  className="h-10 w-10"
                 >
                   <Clock className="h-4 w-4" />
                   <span className="sr-only">Search history</span>
@@ -96,7 +96,7 @@ export function SearchBar() {
                           <CommandItem
                             key={q}
                             onSelect={() => handleHistoryItemClick(q)}
-                            className="flex items-center justify-between cursor-pointer"
+                            className="flex items-center justify-between"
                           >
                             <div className="flex items-center gap-2 flex-1">
                               <Clock className="h-4 w-4 text-muted-foreground" />
@@ -109,7 +109,7 @@ export function SearchBar() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-6 w-6 rounded-full hover:bg-destructive/10 cursor-pointer"
+                                className="h-6 w-6 rounded-full hover:bg-destructive/10"
                                 onClick={(e) => removeHistoryItem(e, q)}
                               >
                                 <X className="h-3 w-3" />
@@ -127,7 +127,7 @@ export function SearchBar() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="w-full justify-start text-muted-foreground hover:text-destructive cursor-pointer"
+                            className="w-full justify-start text-muted-foreground hover:text-destructive"
                             onClick={clearAllHistory}
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
@@ -140,7 +140,7 @@ export function SearchBar() {
                 </Command>
               </PopoverContent>
             </Popover>
-            <Button type="submit" className="h-10 cursor-pointer">
+            <Button type="submit" className="h-10">
               Search
             </Button>
           </div>

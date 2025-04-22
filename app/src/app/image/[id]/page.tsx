@@ -59,7 +59,7 @@ export default function ImageDetailPage({
         <Button
           variant="ghost"
           size="sm"
-          className="flex items-center gap-1 px-2 h-8 cursor-pointer"
+          className="flex items-center gap-1 px-2 h-8"
           onClick={() => {
             if (isBrowser() && window.history.length > 1) {
               router.back();
@@ -121,7 +121,7 @@ export default function ImageDetailPage({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="flex items-center gap-2 cursor-pointer flex-1">
+              <Button className="flex items-center gap-2 flex-1">
                 <ExternalLink className="h-4 w-4" />
                 View Original
               </Button>

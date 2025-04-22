@@ -13,15 +13,12 @@ export function FilterSidebar() {
         <h3 className="mb-4 text-lg font-medium">Filters</h3>
         <FilterAccordion />
         <div className="mt-4 space-y-2">
-          <Button
-            className="w-full cursor-pointer"
-            onClick={handleApplyFilters}
-          >
+          <Button className="w-full" onClick={handleApplyFilters}>
             Apply Filters
           </Button>
           <Button
             variant="outline"
-            className="w-full cursor-pointer"
+            className="w-full"
             onClick={handleResetFilters}
           >
             Reset
